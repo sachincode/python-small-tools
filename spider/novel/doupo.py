@@ -30,7 +30,6 @@ def get_content(chapter_id):
     resp.encoding = 'utf-8'
     soup = BeautifulSoup(resp.text, 'html.parser')
     title = soup.title.string.split('-')[0].strip()
-    print title
     tag = soup.find(id="content")
     contents = []
     for line in tag.contents:
@@ -39,7 +38,7 @@ def get_content(chapter_id):
         elif isinstance(line, Tag):
             if line.text:
                 contents.append(line.text)
-    return contents
+    return title, contents
 
 
 def open_chap(chapter_id):
@@ -48,7 +47,8 @@ def open_chap(chapter_id):
     :param chapter_id: 章节ID, 从2开始, 1646截止
     :return:
     """
-    contents = get_content(chapter_id)
+    title, contents = get_content(chapter_id)
+    print title
     result = format_show(contents)
     for line in result:
         print line
