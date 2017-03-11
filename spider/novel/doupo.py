@@ -9,12 +9,16 @@ import sys
 from bs4 import BeautifulSoup
 from bs4.element import NavigableString
 from bs4.element import Tag
+import time
+import random
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
 base_chapter_id = 289
 base_page_id = 1049704
+start_chapter_id = 2
+end_chapter_id = 1646
 
 url = 'http://www.xxbiquge.com/1_1413/{}.html'
 
@@ -69,6 +73,40 @@ def format_show(contents, char_num=20):
             result.append(line[i:i+char_num])
     return result
 
+
+def save_chapter_novel(from_chapter_id, to_chapter_id, file_name):
+    """
+    保存小说内容到文件
+    :param from_chapter_id: 开始章节id
+    :param to_chapter_id: 结束章节id
+    :param file_name: 文件名
+    :return:
+    """
+    contents = []
+    for chapter_id in range(from_chapter_id, to_chapter_id+1):
+        chapter = get_content(chapter_id)
+        contents.append(chapter)
+        r = random.uniform(1, 2)
+        time.sleep(r)
+    lines = []
+    for one in contents:
+        lines.append(one[0])
+        for c in one[1]:
+            lines.append(c)
+        lines.append('\n\n')
+    write_file(file_name, lines)
+
+
+def save_novel(file_name):
+    save_chapter_novel(start_chapter_id, end_chapter_id, file_name)
+
+
+def write_file(file_name, lines):
+    f = open(file_name, 'w')
+    for line in lines:
+        f.write(line)
+        f.write('\n')
+    f.close()
 
 if __name__ == '__main__':
     open_chap(2)
