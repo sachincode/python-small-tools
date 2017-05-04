@@ -26,7 +26,7 @@ Options:
 # ) ENGINE=InnoDB AUTO_INCREMENT=433 DEFAULT CHARSET=utf8mb4 COMMENT='扣款前请求阶段拒绝统计表'
 #
 # 然后执行本脚本，如：
-# python -m sachin.java.model generate /home/shichengzhang/test.txt
+# python -m java.model generate /home/shichengzhang/test.txt
 # 或
 # python model.py generate /home/shichengzhang/test.txt
 #
