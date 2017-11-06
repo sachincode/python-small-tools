@@ -61,6 +61,30 @@ def get_table_sql(table_name):
     return lines
 
 
+def get_table_sql_range(table_name, start_id, end_id, increment_id):
+    connection = get_connection()
+    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+    sql = 'select * from {} where {} >= %s and {} < %s order by {} limit {}'.format(table_name, increment_id, increment_id, increment_id, limit)
+    lines = []
+    tid = start_id
+    count = 0
+    while True:
+        print 'next start id: {}'.format(tid)
+        cursor.execute(sql, (tid, end_id))
+        out = cursor.fetchall()
+        if not out:
+            break
+        tid = out[-1].get(increment_id) + 1
+        lines.append(build_insert_sql(table_name, out))
+        count += len(out)
+        if len(out) < limit:
+            break
+    cursor.close()
+    connection.close()
+    print 'table: {}, count: {}'.format(table_name, count)
+    return lines
+
+
 def get_tid(data):
     ids = {'id', 'ID', 'iD', 'Id'}
     for one in ids:
@@ -104,6 +128,23 @@ def export(table_name):
     :return:
     """
     out = get_table_sql(table_name)
+    for one in out:
+        print one
+    print 'insert sql count: {}'.format(len(out))
+    file_name = '/tmp/' + table_name + '.sql'
+    write_file(file_name, out)
+    print 'file name: {}'.format(file_name)
+
+def export_range(table_name, start_id, end_id, increment_id="id"):
+    """
+    导出sql文件数据
+    :param table_name: 表名
+    :param start_id: 开始id
+    :param end_id: 结束id
+    :param increment_id: 主键列名
+    :return:
+    """
+    out = get_table_sql_range(table_name, start_id, end_id, increment_id)
     for one in out:
         print one
     print 'insert sql count: {}'.format(len(out))
