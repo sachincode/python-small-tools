@@ -25,7 +25,7 @@ url = 'http://www.xxbiquge.com/1_1413/{}.html'
 
 def get_content(chapter_id):
     if chapter_id < 2 or chapter_id > 1646:
-        print "章节ID, 从2开始, 1646截止"
+        print "章节ID,  从2开始, 1646截止"
         return
     diff = chapter_id - base_chapter_id
     page_id = base_page_id + diff
